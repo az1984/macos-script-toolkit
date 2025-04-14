@@ -1,0 +1,3 @@
+# MyApp Uninstaller
+
+This project provides a modular, headless-safe uninstaller for MyApp on macOS...
