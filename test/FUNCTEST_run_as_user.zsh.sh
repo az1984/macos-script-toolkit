@@ -1,37 +1,30 @@
 #!/bin/zsh
-#
+
 # FUNCTEST_run_as_user.zsh
 #
-# Tests the run_as_user function by executing a simple command as a given user.
-# It demonstrates both the standard (brief output) and the verbose mode
-# (detailed debug output including stdout, stderr, and exit code).
+# Tests the run_as_user function with:
+#   USER_0 - valid shortname with a login session
+#   USER_1 - invalid or non-existent user
+#   USER_2 - empty input
 #
-# Note: This test must be run as root.
-#
-# Usage:
-#   ./FUNCTEST_run_as_user.zsh
-#
+# NOTE: You must be root to run this test.
 
 source "../../lib/run_as_user.zsh"
 
-# Set the target user; for testing, "root" is used since it is guaranteed to exist.
-TARGET_USER="root"
+USER_0="your_real_username_here"  # replace with an actual shortname on your system
+USER_1="definitely_not_real"
+USER_2=""
 
-echo "Running in Standard Mode:"
-# Standard mode: run_as_user invoked without the --verbose flag.
-# Here, we use /bin/echo for simplicity.
-run_as_user "$TARGET_USER" /bin/echo "Hello from run_as_user (standard)!"
-exit_code_standard=$?
-echo "Command was: /bin/echo \"Hello from run_as_user (standard)!\""
-echo "Captured STDOUT: $run_as_user_output"
-echo "Captured STDERR: $run_as_user_error"
-echo "Exit Code: $exit_code_standard"
+echo "Testing USER_0 (should succeed):"
+run_as_user "$USER_0" whoami
+echo "Exit code: $?"
+echo ""
 
-echo "\nRunning in Verbose Mode:"
-# Verbose mode: pass the "--verbose" flag as the third argument.
-run_as_user "$TARGET_USER" /bin/echo "Hello from run_as_user (verbose)!" --verbose
-exit_code_verbose=$?
-echo "Command was: /bin/echo \"Hello from run_as_user (verbose)!\" --verbose"
-echo "Captured STDOUT: $run_as_user_output"
-echo "Captured STDERR: $run_as_user_error"
-echo "Exit Code: $exit_code_verbose"
+echo "Testing USER_1 (invalid user):"
+run_as_user "$USER_1" whoami
+echo "Exit code: $?"
+echo ""
+
+echo "Testing USER_2 (empty input):"
+run_as_user "$USER_2" whoami
+echo "Exit code: $?"
